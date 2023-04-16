@@ -43,7 +43,7 @@ sonarqube-backend-sast:
       -Dsonar.projectKey=${SONAR_PROJECT_KEY}
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN}
-      -Dsonar.projectName="08_ВАСИЛИЙСУРИН_БЭКЭНД"   
+      -Dsonar.projectName="11_vsurin_momob"   
 
 spotbugs-sast:
   variables:
