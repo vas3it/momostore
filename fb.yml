@@ -9,20 +9,6 @@ stages:
 ##  - ver_f_downstream
 ##  - notify 
 
-#build-frontend-artefacts-for-test: 
-#  stage: build-for-test
-#  script:        
-#    - cd frontend
-#    - npm install
-#    - npm run build
-#  only:
-#    changes:
-#    - frontend/*  
-#  cache:
-#    key: frontend
-#    paths:
-#      - frontend/dist/frontend # для хранения фронта
-
 sonarqube-frontend-sast:
   stage: test
   image: sonarsource/sonar-scanner-cli:latest
@@ -40,7 +26,7 @@ sonarqube-frontend-sast:
 spotbugs-sast:
   stage: test
   script:
-    - cd frontend #костыль, но rules не получилось настроить, видимо надо тесты в отедльный .yml выносить - зато галка зеленая)
+    - cd frontend
 
 ##build-frontend-docker-image:
 ##  stage: build-image-for-release
