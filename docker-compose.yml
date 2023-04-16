@@ -1,0 +1,52 @@
+version: "3.4"
+networks:
+   momostore:
+
+services:
+#Контейнер для сборки образа новой версии в CI
+  backend:
+    build:
+      context: backend
+      args:
+          VERSION: ${VERSION}
+      dockerfile: ./Dockerfile
+    image: gitlab.praktikum-services.ru:5050/v.surin/momostore/momo-backend:${VERSION}
+    ports:
+      - "8081"
+    expose:
+      - "8081"
+#    environment:
+#      - VIRTUAL_HOST=sausage-store-backend
+#      - DEV_HOST=${DEV_HOST}
+#      - VAULT_ADDR=${VAULT_ADDR}
+    env_file:
+      - ./.env.backend
+    entrypoint: ["echo", "Service backend disabled"]
+#     entrypoint: [ "./main" ]
+    networks:
+      - momostore
+
+  frontend:
+    build:
+      context: frontend
+      args:
+          VERSION: ${VERSION}
+      dockerfile: ./Dockerfile
+    image: gitlab.praktikum-services.ru:5050/v.surin/momostore/momo-frontend:${VERSION}
+    container_name: momo-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - VERSION=${VERSION}
+      - NODE_ENV="production"
+      - VUE_APP_API_URL="http://localhost:8081"
+#      - DEFAULT_HOST=sausage-store-backend
+    env_file:
+      - ./.env.frontend
+    expose:
+      - "80"
+    networks:
+      - momostore
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
