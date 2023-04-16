@@ -6,7 +6,7 @@ variables:
 #    file: 'DockerInDockerTemplate.yml'
     
 stages:
-  - build-for-test
+#  - build-for-test
   - test 
 #  - build-image-for-release
 #  - deploy
@@ -14,11 +14,11 @@ stages:
 #  - deploy
 #  - notify  
 
-build-backend-artefact-for-test:  
-  stage: build-for-test
-  script:
-    - cd backend
-    - mvn package -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -Dversion.application=${VERSION}
+#build-backend-artefact-for-test:  
+#  stage: build-for-test
+#  script:
+#    - cd backend
+#    - mvn package -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository -Dversion.application=${VERSION}
 #     - mvn package -Dversion.application=${VERSION} -Dmaven.repo.local=${MAVEN_REPO_PATH}
 #  rules: # rules и only в данных случаях взаимозаменяемы   
 #     - changes:
@@ -27,14 +27,15 @@ build-backend-artefact-for-test:
 #    paths:
 #      - backend/target/sausage-store-${VERSION}.jar
 #      - ${CI_PROJECT_DIR}/.m2/
-  cache:
-    key: backend
-    paths:
-      - ${CI_PROJECT_DIR}/.m2/repository # для хранения зависимостей бэкенда  
+#  cache:
+#    key: backend
+#    paths:
+#      - ${CI_PROJECT_DIR}/.m2/repository # для хранения зависимостей бэкенда  
 
 sonarqube-backend-sast:
   stage: test
-  image: maven:3.8-openjdk-16
+#  image: maven:3.8-openjdk-16
+  image: sonarsource/sonar-scanner-cli:latest
 #  image: cr.yandex/crp4v5843a482vqmajv8/maven:3.8.2-openjdk-16
   script:
     - cd backend
