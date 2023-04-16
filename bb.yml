@@ -40,7 +40,8 @@ sonarqube-backend-sast:
   script:
     - cd backend
     - >
-      mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
+      sonar-scanner
+      -Dsonar.sources=.
       -Dsonar.projectKey=${SONAR_PROJECT_KEY}
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN}
