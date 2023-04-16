@@ -52,6 +52,14 @@ spotbugs-sast:
   script:
     - cd backend #костыль, но rules не получилось настроить, видимо надо тесты в отедльный .yml выносить - зато галка зеленая)
 
+go-test:
+  stage: test
+  image: golang:latest
+  script:
+    - cd backend
+    - go test -v ./...
+  allow_failure: true
+
 #  variables:
 #    COMPILE: "false"
 #    SAST_JAVA_VERSION: 11
