@@ -9,6 +9,7 @@ stages:
 ##  - ver_f_downstream
 ##  - notify 
 
+##vas: тест по кнопке, так как в сонаре ошибки. По вебинару - ошибки в коде - не наша проблема)
 sonarqube-frontend-sast:
   stage: test
   image: sonarsource/sonar-scanner-cli:latest
