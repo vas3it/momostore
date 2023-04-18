@@ -3,7 +3,7 @@ variables:
     
 stages:
   - test 
-#  - build-image-for-release
+  - build-image-for-release
 #  - deploy
 #  - ver_f_downstream
 #  - deploy
@@ -35,10 +35,18 @@ go-test:
     - go test -v ./...
   allow_failure: true
 
-##build-backend-docker-image:
-##  stage: build-image-for-release
-#  image: docker:20.10.12-dind-rootless  
-
+build-backend-docker-image:
+  stage: build-image-for-release
+  image: alpine:latest
+  before_script:
+    - apk add docker docker-compose curl
+    - until docker info; do sleep 1; done
+    # переменные CI_REGISTRY_USER, CI_REGISTRY_PASSWORD, CI_REGISTRY генерятся Гитлабом, их задавать не надо
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker-compose build backend
+    - docker-compose push backend
+  
 ##backend_argo_deploy:
 ##  stage: deploy
 
