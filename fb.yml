@@ -22,6 +22,7 @@ sonarqube-frontend-sast:
       -Dsonar.host.url=${SONARQUBE_URL}
       -Dsonar.login=${SONAR_LOGIN}
       -Dsonar.projectName="11_vsurin_momof"     
+  when: manual    
 
 spotbugs-sast:
   stage: test
