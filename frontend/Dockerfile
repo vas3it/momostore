@@ -4,7 +4,7 @@ ARG VERSION=${VERSION}
 WORKDIR '/app'
 COPY . .
 RUN npm install
-RUN npm run build -- --output-path=dist
+RUN npm run build -- --output-path=/dist
 
 #release
 FROM gitlab.praktikum-services.ru:5050/v.surin/momostore/nginx:latest
