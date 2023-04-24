@@ -5,7 +5,7 @@ stages:
   - test 
   - build-image-for-release
 #  - deploy
-#  - ver_f_downstream
+  - ver_f_downstream
 #  - deploy
 #  - notify  
 
@@ -50,8 +50,15 @@ build-backend-docker-image:
 ##backend_argo_deploy:
 ##  stage: deploy
 
-##for_helmchart_version_update:  
-##  stage: ver_f_downstream
+for_helmchart_version_update:  
+  variables:
+    VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
+    ID: backend
+  stage: ver_f_downstream  
+  trigger:
+    project: v.surin/imomostore
+    branch: main
+
 
 ##copy-compose-files:
 ##  image: alpine:latest
