@@ -48,7 +48,7 @@ build-frontend-docker-image:
 for_helmchart_version_update:  
   variables:
     VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
-    ID: frontend
+#    ID: frontend
   stage: ver_f_downstream  
   trigger:
     project: v.surin/imomostore
