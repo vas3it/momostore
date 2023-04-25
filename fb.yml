@@ -6,7 +6,7 @@ stages:
   - test 
   - build-image-for-release
 ##  - deploy
-  - ver_f_downstream
+  - update-version-chart
 ##  - notify 
 
 ##vas: тест по кнопке, так как в сонаре ошибки. По вебинару - ошибки в коде - не наша проблема)
@@ -45,14 +45,15 @@ build-frontend-docker-image:
 ##frontend_argo_deploy:
 ##  stage: deploy
 
-for_helmchart_version_update:  
-  variables:
-    VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
-#    ID: frontend
-  stage: ver_f_downstream  
-  trigger:
-    project: v.surin/imomostore
-    branch: i01
+update-version-chart:
+  stage: update-version-chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    - apk add docker
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./helmchart_ver2.sh
   
 ##copy-compose-files:
 ##  image: alpine:latest
