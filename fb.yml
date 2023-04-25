@@ -52,7 +52,7 @@ for_helmchart_version_update:
   stage: ver_f_downstream  
   trigger:
     project: v.surin/imomostore
-    branch: main
+    branch: i01
   
 ##copy-compose-files:
 ##  image: alpine:latest
