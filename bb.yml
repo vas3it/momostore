@@ -50,6 +50,7 @@ build-backend-docker-image:
 
 update-version-chart:
   stage: update-version-chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
