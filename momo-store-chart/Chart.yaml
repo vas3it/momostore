@@ -3,10 +3,10 @@ appVersion: 1.0.571411
 dependencies:
 - name: backend
   repository: ""
-  version: latest
+  version: 1.0.571411
 - name: frontend
   repository: ""
-  version: latest
+  version: 1.0.570361
 description: momo-store Helm Chart
 name: momo-store
 type: application
