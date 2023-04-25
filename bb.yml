@@ -47,9 +47,6 @@ build-backend-docker-image:
   script:
     - docker-compose build backend
     - docker-compose push backend
-  
-stages:
-  - helm_deploy_and_upload_chart
 
 update-version-chart:
   stage: update-version-chart
