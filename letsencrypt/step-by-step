@@ -1,0 +1,85 @@
+0. Утилитой yc запрашиваем выпуск сертификата на указанный домен:
+yc certificate-manager certificate request \
+  --name momosurinvascert \
+  --domains momo.surinvas.ru
+--
+Выхлоп:
+id: fpqpudt77b2ab646mf4m
+folder_id: b1gm1ae6uts1pr387al2
+created_at: "2023-04-21T09:15:30.596613177Z"
+name: momosurinvascert
+type: MANAGED
+domains:
+  - momo.surinvas.ru
+status: VALIDATING
+updated_at: "2023-04-21T09:15:30.596613177Z"
+
+1. Далее требуется процедура проверки прав на указанный домен:
+https://cloud.yandex.ru/docs/certificate-manager/operations/managed/cert-validate
+
+Запрашиваем данные для валидации (вставив свой id выпускаемого сертификата):
+yc certificate-manager certificate get \
+  --id fpqpudt77b2ab646mf4m \
+  --full
+--
+Выхлоп:
+  id: fpqpudt77b2ab646mf4m
+folder_id: b1gm1ae6uts1pr387al2
+created_at: "2023-04-21T09:15:30.596Z"
+name: momosurinvascert
+type: MANAGED
+domains:
+  - momo.surinvas.ru
+status: VALIDATING
+updated_at: "2023-04-21T09:15:30.596Z"
+challenges:
+  - domain: momo.surinvas.ru
+    type: DNS
+    created_at: "2023-04-21T09:15:30.596Z"
+    updated_at: "2023-04-21T09:16:52.273Z"
+    status: PENDING
+    message: Create a record in your DNS provider.
+    dns_challenge:
+      name: _acme-challenge.momo.surinvas.ru.
+      type: CNAME
+      value: fpqpudt77b2ab646mf4m.cm.yandexcloud.net.
+  - domain: momo.surinvas.ru
+    type: DNS
+    created_at: "2023-04-21T09:15:30.596Z"
+    updated_at: "2023-04-21T09:16:52.273Z"
+    status: PENDING
+    message: Create a record in your DNS provider.
+    dns_challenge:
+      name: _acme-challenge.momo.surinvas.ru.
+      type: TXT
+      value: UuMXYB5kR2suF_ZQoaafy3MaEgUCuxxcZKiV4nBIV70
+
+2. Создаём у регистратора следующие записи:
+          message: Create a record in your DNS provider.
+    dns_challenge:
+      name: _acme-challenge.momo.surinvas.ru.
+      type: CNAME
+      value: fpqpudt77b2ab646mf4m.cm.yandexcloud.net.
+  - domain: momo.surinvas.ru
+    type: DNS
+    created_at: "2023-04-21T09:15:30.596Z"
+    updated_at: "2023-04-21T09:16:52.273Z"
+    status: PENDING
+
+или
+
+message: Create a record in your DNS provider.
+    dns_challenge:
+      name: _acme-challenge.momo.surinvas.ru.
+      type: TXT
+      value: UuMXYB5kR2suF_ZQoaafy3MaEgUCuxxcZKiV4nBIV70
+
+3. Проверить статус валидации:
+yc certificate-manager certificate get --id fpqpudt77b2ab646mf4m --full
+
+Статус должен быть "VALID"
+
+Процедура валидации заняла 20-30 минут.
+
+4. Показать список всех сертификатов:
+yc certificate-manager certificate list
