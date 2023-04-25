@@ -4,8 +4,9 @@ variables:
 stages:
   - test 
   - build-image-for-release
-#  - deploy
-  - ver_f_downstream
+  - update-version-chart
+  - deploy
+#  - ver_f_downstream
 #  - deploy
 #  - notify  
 
@@ -47,17 +48,40 @@ build-backend-docker-image:
     - docker-compose build backend
     - docker-compose push backend
   
+stages:
+  - helm_deploy_and_upload_chart
+
+update-version-chart:
+  stage: update-version-chart
+  script:
+    - /bin/bash -s < ./yc_kubectl_configng.sh
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./helmchart_ver2.sh
+
+    #Деплоим новую версию приложения
+#    - helm upgrade momo-store ./momo-store-chart
+    #Упаковываем helm-chart приложения
+#    - helm package ./momo-store-chart
+    #Отправляем helm-chart в Nexus
+#    - curl -u ${NEXUS_REPO_LOGIN}:${NEXUS_REPO_PASSWORD} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION_UPSTREAM}.tgz 
+
+
+
+
+
 ##backend_argo_deploy:
 ##  stage: deploy
 
-for_helmchart_version_update:  
-  variables:
-    VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
+#for_helmchart_version_update:  
+#  variables:
+#    VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
 #    ID: backend
-  stage: ver_f_downstream  
-  trigger:
-    project: v.surin/imomostore
-    branch: i01
+#  stage: ver_f_downstream  
+#  trigger:
+#    project: v.surin/imomostore
+#    branch: i01
 
 
 ##copy-compose-files:
