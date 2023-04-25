@@ -5,7 +5,7 @@ stages:
   - test 
   - build-image-for-release
   - update-version-chart
-  - deploy
+#  - deploy
 #  - ver_f_downstream
 #  - deploy
 #  - notify  
