@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: latest
+appVersion: 1.0.571411
 dependencies:
 - name: backend
   repository: ""
@@ -10,4 +10,4 @@ dependencies:
 description: momo-store Helm Chart
 name: momo-store
 type: application
-version: 0.1.0
+version: 1.0.571411
