@@ -39,7 +39,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: {{ .Values.image.repository }}momo-backend:{{ .Chart.Version }}
+          image: {{ .Values.image.repository }}momo-backend:{{ .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 #          imageCredentials:
 #            registry: {{ .Values.image.repository }}
