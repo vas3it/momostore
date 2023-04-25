@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: {{ .Values.image.repository }}momo-frontend:{{ .Chart.Version }}
+          image: {{ .Values.image.repository }}momo-frontend:{{ .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: frontend
