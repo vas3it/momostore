@@ -1,0 +1,40 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend
+  annotations:
+##Сделать в values
+    #ID подсети с нодами
+    ingress.alb.yc.io/subnets: {{ .Values.annotations.subnets }}
+    #ID секгруппы pub-for-nodegroup
+    ingress.alb.yc.io/security-groups: {{ .Values.annotations.securityGroups }}
+    #Автополучение публичного ip-адреса
+    ingress.alb.yc.io/external-ipv4-address: "auto"
+    #Добавил имя группы
+    ingress.alb.yc.io/group-name: "{{ .Values.annotations.groupName }}"
+spec:
+  # В кластере может быть несколько Ingress Controllers, мы используем NGINX#
+#  ingressClassName: "nginx"
+  tls:
+    #ID выпущенного серта
+    - hosts:
+        - "{{ .Values.fqdn }}" 
+#Добавит в values
+      secretName: yc-certmgr-cert-id-fpqpudt77b2ab646mf4m
+  rules:
+    # Хост определяет правило направления траффика по доменному имени
+  - host: "{{ .Values.fqdn }}"
+    http:
+      # Для различных путей в URL можно указать различные бэкенд-сервисы
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # Заранее создан сервис типа ClusterIP
+            # Он выступает в качестве бэкенда нашего Ingress
+            name: frontend
+            port:
+              # У сервиса может быть несколько портов, указываем нужный нам
+              number: {{ .Values.ports.containerPort }}
