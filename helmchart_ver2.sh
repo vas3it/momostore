@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_REGISTRY="gitlab.praktikum-services.ru:5050/momostore/momo-store"
+CONTAINER_REGISTRY="gitlab.praktikum-services.ru:5050/momostore/"
 
 git config --global user.email "$GITLAB_USER_EMAIL"
 git config --global user.name "update-bot"
