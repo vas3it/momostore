@@ -52,6 +52,9 @@ update-version-chart:
   stage: update-version-chart
   image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
+    - apk add docker
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
 
