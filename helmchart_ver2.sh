@@ -6,7 +6,8 @@ git config --global user.email "$GITLAB_USER_EMAIL"
 git config --global user.name "update-bot"
 
 mkdir -p /tmp/momo-store-iac && cd $_
-git clone https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git .
+#git clone https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git .
+git clone https://v.surin:*A6qy{E2@gitlab.praktikum-services.ru/v.surin/momostore.git .
 git switch $CI_COMMIT_REF_NAME
 
 # Update helm-chart version
