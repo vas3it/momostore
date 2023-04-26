@@ -27,7 +27,7 @@ frontend:
     changes:
      - frontend/**/*
 
-frontend:
+upload-chart:
   stage: module-pipelines
   trigger:
     include:
