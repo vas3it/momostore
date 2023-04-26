@@ -4,9 +4,7 @@ variables:
 stages:
   - test 
   - build-image-for-release
-  - update-version-chart
-  - deploy
-  - pcp 
+  - update-version-chart 
 
 sonarqube-backend-sast:
   stage: test
@@ -56,22 +54,3 @@ update-version-chart:
   script:
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
-
-deploy-app:
-  stage: deploy    
-  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
-  script:
-    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
-    - /bin/bash -s < ./yc_kubectl_configng.sh
-    #Деплоим новую версию приложения
-    - helm upgrade momo-store ./momo-store-chart
-
-pcp:
-  variables:
-    VERSION_CHART: ${VERSION}
-  stage: pcp
-  trigger:
-    include:
-      - local: v.surin/momostore/upload_chart.yml
-
-
