@@ -15,8 +15,8 @@ upload:
   stage: upload_chart
   image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
-    - VERSION_CHART=$(grep -E -o "(appVersion: )(.*)" ./momo-store-chart/Chart.yaml | cut -c 13-22)
-    - echo $VERSION_CHART
+    - VERSION_CHART="$(grep -E -o "(appVersion: )(.*)" ./momo-store-chart/Chart.yaml | cut -c 13-22)"
+#    - echo $VERSION_CHART
     #Упаковываем helm-chart приложения
 #    - helm package ./momo-store-chart 
     - helm package ./momo-store-chart
