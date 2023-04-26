@@ -67,8 +67,8 @@ update-version-chart:
        export "GITLAB_USER_EMAIL=${GITLAB_USER_EMAIL}";
        export "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}";
        env > 1.txt;
-    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
       /bin/bash -s " < ./helmchart_ver2.sh
+         #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
 
     #Деплоим новую версию приложения
 #    - helm upgrade momo-store ./momo-store-chart
