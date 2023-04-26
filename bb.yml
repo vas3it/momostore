@@ -70,9 +70,7 @@ upload_chart_to_repo:
   stage: upload_chart
   image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
-    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
-    - /bin/bash -s < ./yc_kubectl_configng.sh
     #Упаковываем helm-chart приложения
     - helm package ./momo-store-chart
     #Отправляем helm-chart в Nexus
-    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file /builds/v.surin/momostore/momo-store-${VERSION}.tgz
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz
