@@ -26,3 +26,15 @@ frontend:
   only:
     changes:
      - frontend/**/*
+
+frontend:
+  stage: module-pipelines
+  trigger:
+    include:
+     - local: 'upload-chart.yml' 
+     - project: 'templates/ci'
+       file: 'DockerInDockerTemplate.yml'
+    strategy: depend # depend нужен, если какой-нибудь дочерний пайплайн свалился, мы знали, что общий пайплайн тоже идёт с ошибкой
+  only:
+    changes:
+     - upload/**/*     
