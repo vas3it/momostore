@@ -5,10 +5,8 @@ stages:
   - test 
   - build-image-for-release
   - update-version-chart
-#  - deploy
-#  - ver_f_downstream
-#  - deploy
-#  - notify  
+  - deploy
+  - upload_chart 
 
 sonarqube-backend-sast:
   stage: test
@@ -59,36 +57,22 @@ update-version-chart:
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
 
+deploy-app:
+  stage: deploy    
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./yc_kubectl_configng.sh
     #Деплоим новую версию приложения
-#    - helm upgrade momo-store ./momo-store-chart
+    - helm upgrade momo-store ./momo-store-chart
+
+upload_chart_to_repo:
+  stage: upload_chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./yc_kubectl_configng.sh
     #Упаковываем helm-chart приложения
-#    - helm package ./momo-store-chart
+    - helm package ./momo-store-chart
     #Отправляем helm-chart в Nexus
-#    - curl -u ${NEXUS_REPO_LOGIN}:${NEXUS_REPO_PASSWORD} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION_UPSTREAM}.tgz 
-
-
-
-
-
-##backend_argo_deploy:
-##  stage: deploy
-
-#for_helmchart_version_update:  
-#  variables:
-#    VERSION_UPSTREAM: 1.0.${CI_PIPELINE_ID}
-#    ID: backend
-#  stage: ver_f_downstream  
-#  trigger:
-#    project: v.surin/imomostore
-#    branch: i01
-
-
-##copy-compose-files:
-##  image: alpine:latest
-##  stage: deploy
-
-##deploy-backend:
-##  stage: deploy
-
-##slack-notification-backend:
-##  stage: notify
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz
