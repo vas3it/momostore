@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#Недостаток прав при пуше (403)
+#Почему не CI_JOB_TOKEN?
+#https://forum.gitlab.com/t/pushing-back-changes-with-ci-job-token-possible/78972
+
+#Решение - PAT
+#https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html
+
 CONTAINER_REGISTRY="gitlab.praktikum-services.ru:5050/v.surin/momostore"
 
 git config --global user.email "$GITLAB_USER_EMAIL"
