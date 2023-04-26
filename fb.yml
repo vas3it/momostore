@@ -2,12 +2,11 @@ variables:
   VERSION: 1.0.${CI_PIPELINE_ID}
 
 stages:
-#  - build-for-test
   - test 
   - build-image-for-release
-##  - deploy
   - update-version-chart
-##  - notify 
+  - deploy
+  - upload_chart
 
 ##vas: тест по кнопке, так как в сонаре ошибки. По вебинару - ошибки в коде - не наша проблема)
 sonarqube-frontend-sast:
@@ -36,14 +35,10 @@ build-frontend-docker-image:
   before_script:
     - apk add docker docker-compose curl
     - until docker info; do sleep 1; done
-    # переменные CI_REGISTRY_USER, CI_REGISTRY_PASSWORD, CI_REGISTRY генерятся Гитлабом, их задавать не надо
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker-compose build frontend
     - docker-compose push frontend
-
-##frontend_argo_deploy:
-##  stage: deploy
 
 update-version-chart:
   stage: update-version-chart
@@ -56,12 +51,22 @@ update-version-chart:
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
   
-##copy-compose-files:
-##  image: alpine:latest
-##  stage: deploy
+deploy-app:
+  stage: deploy    
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./yc_kubectl_configng.sh
+    #Деплоим новую версию приложения
+    - helm upgrade momo-store ./momo-store-chart
 
-##deploy-frontend:
-##  stage: deploy
-      
-##slack-notification-frontend:
-##  stage: notify
+upload_chart_to_repo:
+  stage: upload_chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./yc_kubectl_configng.sh
+    #Упаковываем helm-chart приложения
+    - helm package ./momo-store-chart
+    #Отправляем helm-chart в Nexus
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz
