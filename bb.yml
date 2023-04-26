@@ -52,23 +52,12 @@ update-version-chart:
   stage: update-version-chart
   image: alpine:latest
   before_script:
-    - apk add openssh-client bash
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts    
+    - apk update && apk add bash curl git openssh-client docker
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY    
   script:
-    - ssh ${DEV_USER}@${DEV_HOST}
-      "export "VERSION=${VERSION}";
-       export "CI_REGISTRY_USER=${CI_REGISTRY_USER}";
-       export "CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD}";
-       export "GITLAB_USER_EMAIL=${GITLAB_USER_EMAIL}";
-       export "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}";
-       env > 1.txt;
-      /bin/bash -s " < ./helmchart_ver2.sh
-         #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./helmchart_ver2.sh
 
     #Деплоим новую версию приложения
 #    - helm upgrade momo-store ./momo-store-chart
