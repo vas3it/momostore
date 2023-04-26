@@ -5,8 +5,6 @@ stages:
   - test 
   - build-image-for-release
   - update-version-chart
-  - deploy
-  - upload_chart
 
 ##vas: тест по кнопке, так как в сонаре ошибки. По вебинару - ошибки в коде - не наша проблема)
 sonarqube-frontend-sast:
@@ -50,23 +48,3 @@ update-version-chart:
   script:
     #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
     - /bin/bash -s < ./helmchart_ver2.sh
-  
-deploy-app:
-  stage: deploy    
-  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
-  script:
-    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
-    - /bin/bash -s < ./yc_kubectl_configng.sh
-    #Деплоим новую версию приложения
-    - helm upgrade momo-store ./momo-store-chart
-
-upload_chart_to_repo:
-  stage: upload_chart
-  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
-  script:
-    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
-    - /bin/bash -s < ./yc_kubectl_configng.sh
-    #Упаковываем helm-chart приложения
-    - helm package ./momo-store-chart
-    #Отправляем helm-chart в Nexus
-    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz
