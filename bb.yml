@@ -6,7 +6,7 @@ stages:
   - build-image-for-release
   - update-version-chart
   - deploy
-  - upload_chart 
+  - pcp 
 
 sonarqube-backend-sast:
   stage: test
@@ -65,3 +65,13 @@ deploy-app:
     - /bin/bash -s < ./yc_kubectl_configng.sh
     #Деплоим новую версию приложения
     - helm upgrade momo-store ./momo-store-chart
+
+pcp:
+  variables:
+    VERSION_CHART: ${VERSION}
+  stage: pcp
+  trigger:
+    include:
+      - local: v.surin/momostore/upload_chart.yml
+
+
