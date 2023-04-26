@@ -6,10 +6,7 @@ git config --global user.email "$GITLAB_USER_EMAIL"
 git config --global user.name "update-bot"
 
 mkdir -p /tmp/momo-store-iac && cd $_
-#git clone https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git .
-#git clone v.surin@gitlab.praktikum-services.ru:momostore/momo-store-iac.git .
-git clone https://gitlab-ci-token:C_A4jgyYkP125kHiyTyu@gitlab.praktikum-services.ru/v.surin/momostore.git .
-#git clone ${SPECGIT} .
+git clone https://gitlab-ci-token:${PAT_TOKEN}@gitlab.praktikum-services.ru/v.surin/momostore.git .
 git switch $CI_COMMIT_REF_NAME
 
 # Update helm-chart version
@@ -35,8 +32,5 @@ fi
 
 git commit -a -m "Updated to version $VERSION"
 git push origin $CI_COMMIT_REF_NAME
-#git push https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git $CI_COMMIT_REF_NAME
-#git push https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git HEAD:$CI_COMMIT_REF_NAME
-#git push -f https://$CI_REGISTRY_USER:$GIT_TOKEN@gitlab.praktikum-services.ru/v.surin/momostore.git HEAD:${CI_COMMIT_REF_NAME}
 
 exit 0
