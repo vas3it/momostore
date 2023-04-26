@@ -15,9 +15,10 @@ upload:
   stage: upload_chart
   image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
+    - VERSION_CHART=$(grep -E -o "(appVersion: )(.*)" Chart.yaml | cut -c 13-22)
+    - echo $VERSION_CHART
     #Упаковываем helm-chart приложения
 #    - helm package ./momo-store-chart 
-#####Здесь воткнуть переменную от версии
     - helm package ./momo-store-chart
     #Отправляем helm-chart в Nexus
     - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION_CHART}.tgz  
