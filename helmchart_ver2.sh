@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CONTAINER_REGISTRY="gitlab.praktikum-services.ru:5050/v.surin/momostore"
+docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 git config --global user.email "$GITLAB_USER_EMAIL"
 git config --global user.name "update-bot"
