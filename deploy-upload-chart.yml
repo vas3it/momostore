@@ -12,7 +12,7 @@ deploy:
     - helm upgrade momo-store ./momo-store-chart
 
 upload:
-  stage: upload_chart
+  stage: upload-chart
   image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
   script:
 #    - export VERSION_CHART="$(grep -E -o "(appVersion: )(.*)" ./momo-store-chart/Chart.yaml | cut -c 13-22)"
