@@ -1,1 +1,12 @@
+stages:
+  - upload_chart
 
+upload_chart_to_repo:
+  stage: upload_chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Упаковываем helm-chart приложения
+#    - helm package ./momo-store-chart 
+    - helm package ./momo-store-chart
+    #Отправляем helm-chart в Nexus
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz  
