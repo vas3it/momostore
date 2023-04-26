@@ -35,6 +35,7 @@ fi
 git commit -a -m "Updated to version $VERSION"
 git push origin $CI_COMMIT_REF_NAME
 #git push https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git $CI_COMMIT_REF_NAME
-git push https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git HEAD:$CI_COMMIT_REF_NAME
+#git push https://$CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD@gitlab.praktikum-services.ru/v.surin/momostore.git HEAD:$CI_COMMIT_REF_NAME
+git push -f https://$CI_REGISTRY_USER:$GIT_TOKEN@gitlab.praktikum-services.ru/v.surin/momostore.git HEAD:${CI_COMMIT_REF_NAME}
 
 exit 0
