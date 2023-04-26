@@ -75,4 +75,4 @@ upload_chart_to_repo:
     #Упаковываем helm-chart приложения
     - helm package ./momo-store-chart
     #Отправляем helm-chart в Nexus
-    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file momo-store-${VERSION}.tgz
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file /builds/v.surin/momostore/momo-store-${VERSION}.tgz
