@@ -11,4 +11,3 @@ description: momo-store Helm Chart
 name: momo-store
 type: application
 version: 1.0.571471
-test2
