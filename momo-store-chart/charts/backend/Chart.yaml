@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 1.0.572609
+appVersion: 1.0.572628
 description: Backend Helm Chart
 name: backend
 type: application
-version: 1.0.572609
+version: 1.0.572628
