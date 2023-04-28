@@ -1,3 +1,4 @@
+#Чувствительные данные спрятаны за переменные исключительно ради наглядности. Сам конфиг запускался вручную и не встроен ни в один пайплайн
 ############################################################################
 # Данные YC test
 ############################################################################
@@ -30,8 +31,8 @@ backend "s3" {
     bucket     = "momo-terraform"
     region     = "ru-central1"
     key        = "tf_state_s3/terraform.tfstate"
-    access_key = "YCAJEEdjCVS1iAVZm1XIF1L97"
-    secret_key = "YCOWwd7hmih0ChCRUGyx-86yDb1hhZ7GKuSiBGck"
+    access_key = "${YC_ACCESS_KEY}"
+    secret_key = "${YC_SECRET_KEY}"
 
     skip_region_validation      = true
     skip_credentials_validation = true
@@ -43,7 +44,7 @@ backend "s3" {
 ############################################################################
 
 provider "yandex" {
-  token = "y0_AgAAAAAR24UWAATuwQAAAADQqZsYNRHtBszARiGvJBy5AEOMhVbYGHo"
+  token = "${YC_SA_TOKEN}"
   cloud_id  = "b1g5vaj7usev1602ttda"
   folder_id = "b1gm1ae6uts1pr387al2"
   zone = "ru-central1-a"
