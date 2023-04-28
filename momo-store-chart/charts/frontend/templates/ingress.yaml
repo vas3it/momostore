@@ -4,24 +4,13 @@ kind: Ingress
 metadata:
   name: frontend
   annotations:
-##Сделать в values
-    #ID подсети с нодами
-    ingress.alb.yc.io/subnets: {{ .Values.annotations.subnets }}
-    #ID секгруппы pub-for-nodegroup
-    ingress.alb.yc.io/security-groups: {{ .Values.annotations.securityGroups }}
-    #Автополучение публичного ip-адреса
-    ingress.alb.yc.io/external-ipv4-address: "auto"
-    #Добавил имя группы
-    ingress.alb.yc.io/group-name: "{{ .Values.annotations.groupName }}"
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
-  # В кластере может быть несколько Ingress Controllers, мы используем NGINX#
-#  ingressClassName: "nginx"
   tls:
-    #ID выпущенного серта
     - hosts:
-        - "{{ .Values.fqdn }}" 
-#Добавит в values
-      secretName: yc-certmgr-cert-id-fpqpudt77b2ab646mf4m
+        - "{{ .Values.fqdn }}"
+      secretName: letsencrypt
   rules:
     # Хост определяет правило направления траффика по доменному имени
   - host: "{{ .Values.fqdn }}"
