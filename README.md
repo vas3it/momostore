@@ -126,3 +126,7 @@ go test -v ./...
 Третье значение привязано к номеру пайплайна (переменная **CI_PIPELINE_ID**).
 Версия назначается тегу docker-образа и версии helm-chart (общая версия+версия части приложения - backend или frontend)
 Версии "M" и "L" меняются в описании пайплайна руками, после например оценки важности и масштабности вносимых изменений.
+
+## Ссылка на презентацию
+
+https://docs.google.com/presentation/d/1OMs9XXGukx-xRrQPtXjtwhYFZiTyqUyetITZkbgYJLo/edit?usp=sharing
