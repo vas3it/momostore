@@ -34,7 +34,7 @@ https://momo.surinvas.ru/
 
 Процесс состоит из двух пайпланов и пяти работ:
 
-**Пайплайн 1 (Downstream):**
+**Пайплайн 1 (Downstream)**:
 
 1. Тестирование (SAST, Sonarqube, go-tests)
 1. Сборка (в docker image, хранение gitlab docker registry)
