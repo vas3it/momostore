@@ -7,7 +7,7 @@ https://momo.surinvas.ru/
 
 ## Устройство репозитория
 
-Исходный код приложения "Momo Store" хранится в git-репозитории "momostore". 
+Исходный код приложения "**Momo Store**" хранится в git-репозитории "momostore". 
 Приложение поделено на две части **frontend** (JavaScript/NodeJS ) и **backend** (Go). 
 Компоненты частей распологаются в репозитории в одноимённых директориях.
 
@@ -47,15 +47,44 @@ https://momo.surinvas.ru/
 1. Сборка (в docker image, хранение gitlab docker registry)
 1. Обновление версии helm-chart
 
+**Пайплайн 2 (trigger):**
 
-## Frontend
+1. Развёртывание приложения в кластере kubernetis с помощью helm (deploy)
+1. Отправка новой версии helm-chart приложения в репозиторий Nexus (https://nexus.k8s.praktikum-services.tech/repository/momo-store-helm-surin-vasiliy-11/)
+
+**Пайплайны описаны в файлах: **
+
+- .gitlab-ci.yml (stages: - module-pipelines)
+- bb.yml (downstream backend)
+- fb.yml (downstream frontend)
+- deploy-upload-chart.yml (trigger, развёртывание приложения и отправка helm-chart в репозиторий)
+
+**Правила сборки docker-image описаны в файлах:**
+
+- docker-compose.yml
+- ./backend/Dockerfile
+- ./frontend/Dockerfile
+- docker-compose.yml
+- .env.backend и .env.frontend (необходимые переменные)
+
+**Скрипты:**
+
+helmchart_ver2.sh - версионирование helm-chart-а приложения (запрос актуальной версии с помощью docker manifest, внесение изменений git clone, cat/sed, git push)
+
+**Переменные:**
+
+Помимо служебных переменных CI_ , необходимые переменные сохранены в Settings/CI\CD/Variables
+
+Сборка частей приложений
+
+**Frontend**
 
 ```bash
 npm install
 NODE_ENV=production VUE_APP_API_URL=http://localhost:8081 npm run serve
 ```
 
-## Backend
+**Backend**
 
 ```bash
 go run ./cmd/api
