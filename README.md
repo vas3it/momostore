@@ -29,6 +29,9 @@ https://momo.surinvas.ru/
 - группы безопасности
 - описание характеристик создаваемых worker nodes
 
+**yc_kubectl_configng.sh**
+
+Скрипт служит для настройки с помощью CLI YC kubeconfig и доступа к кластеру kubernetes из CI
 
 
 
