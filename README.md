@@ -34,6 +34,18 @@ https://momo.surinvas.ru/
 
 Скрипт служит для настройки с помощью CLI YC kubeconfig и доступа к кластеру kubernetes из CI
 
+## Развёртывание приложения
+
+Развёртывание (deploy) приложения осуществляется с помощью работы (job) в пайплане (pipline) в Gitlab CI.
+Изменение (commit) в любом файле одной из директорий (backend или frontend) приводит к запуску пайпланов по каждой части отдельно (gitlab module-pipelines).
+
+Процесс состоит из двух пайпланов и пяти работ:
+
+**Пайплайн 1 (Downstream):**
+
+1. Тестирование (SAST, Sonarqube, go-tests)
+1. Сборка (в docker image, хранение gitlab docker registry)
+1. Обновление версии helm-chart
 
 
 ## Frontend
