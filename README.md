@@ -45,7 +45,7 @@ https://momo.surinvas.ru/
 1. Развёртывание приложения в кластере kubernetis с помощью helm (deploy)
 1. Отправка новой версии helm-chart приложения в репозиторий Nexus (https://nexus.k8s.praktikum-services.tech/repository/momo-store-helm-surin-vasiliy-11/)
 
-**Пайплайны описаны в файлах: **
+**Пайплайны описаны в файлах:**
 
 - .gitlab-ci.yml (stages: - module-pipelines)
 - bb.yml (downstream backend)
