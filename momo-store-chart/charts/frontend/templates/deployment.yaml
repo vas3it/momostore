@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    #Имя приложения
+    app.kubernetes.io/name: frontend
+    #Уникальное имя, идентифицирующее экземпляр приложения
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    #Текущая версия приложения
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    #Инструмент, используемый для управления работой приложения
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+   #Метка, чтобы операторы находии все экземпляры конкретного инстанса для использования
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    #wtf
+    app.kubernetes.io/component: frontend
+    #Имя приложения выше уровнем, частью которого является это приложение
+    app.kubernetes.io/part-of: sausage-store
+spec:
+  replicas: {{ .Values.spec.replicas }}
+  revisionHistoryLimit: {{ .Values.spec.revisionHistoryLimit }}
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: app
+            operator: In
+            values:
+              - frontend
+    spec:
+      containers:
+        - name: frontend
+          image: {{ .Values.image.repository }}momo-frontend:{{ .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: frontend
+              containerPort: {{ .Values.ports.containerPort }}
+      imagePullSecrets:
+        - name: regcred

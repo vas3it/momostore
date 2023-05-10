@@ -1,0 +1,23 @@
+stages:
+  - deploy
+  - upload-chart
+
+deploy:
+  stage: deploy    
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./yc_kubectl_configng.sh
+    #Задаём секрет
+    - kubectl create secret docker-registry regcred --docker-server=gitlab.praktikum-services.ru:5050/v.surin/momostore/ --docker-username=${DOCKER_LOGIN} --docker-password=${DOCKER_PASS}
+    #Деплоим новую версию приложения
+    - helm upgrade momo-store ./momo-store-chart
+
+upload:
+  stage: upload-chart
+  image: gitlab.praktikum-services.ru:5050/v.surin/momostore/helm-kubectl
+  script:
+    #Упаковываем helm-chart приложения
+    - helm package ./momo-store-chart
+    #Отправляем helm-chart в Nexus
+    - curl -u ${NEXUS_REPO_USER}:${NEXUS_REPO_PASS} ${NEXUS_REPO_URL_HELM} --upload-file *.tgz  

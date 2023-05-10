@@ -1,0 +1,76 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    #Имя приложения
+    app.kubernetes.io/name: backend
+    #Уникальное имя, идентифицирующее экземпляр приложения
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    #Текущая версия приложения
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    #Инструмент, используемый для управления работой приложения
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    #Метка, чтобы операторы находии все экземпляры конкретного инстанса для использования
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    #wtf
+    app.kubernetes.io/component: backend
+    #Имя приложения выше уровнем, частью которого является это приложение
+    app.kubernetes.io/part-of: momo-store
+spec:
+#  replicas: {{ .Values.spec.replicas }}
+  revisionHistoryLimit: {{ .Values.spec.revisionHistoryLimit }}
+  # Стратегия развёртывания. Recreate — удалит сначала все старые Pod'ы
+  # Есть и более гибкая стратегии, например, RollingUpdate, которая будет обновлять Pod'ы порциями
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.image.repository }}momo-backend:{{ .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+#          imageCredentials:
+#            registry: {{ .Values.image.repository }}
+#            username: {{ .Values.image.username }}
+#            password: {{ .Values.image.password }}
+#          env:
+#            - name: VAULT_HOST
+#              value: 51.250.67.45:8200
+#            - name: VAULT_TOKEN
+#              valueFrom:
+#                secretKeyRef:
+#                  name: vault
+#                  key: vault_token
+#            - name: DEV_HOST
+#              value: 51.250.67.45
+#            - name: VIRTUAL_HOST
+#              value: backend
+#            - name: SPRING_DATASOURCE_URL
+#              value: jdbc:postgresql://rc1b-micxirmrnkrwhvb8.mdb.yandexcloud.net:6432/surinvas
+          ports:
+            - name: backend
+              containerPort: {{ .Values.ports.containerPort }}
+#Важно потом добавить маршрут для проб состояний
+#          livenessProbe:
+#            httpGet:
+#              path: /actuator/health
+#              port: 8080
+#            initialDelaySeconds: 180
+#            periodSeconds: 31
+#            timeoutSeconds: 1
+#            failureThreshold: 6
+      imagePullSecrets:
+        - name: regcred
+

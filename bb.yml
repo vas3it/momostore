@@ -1,0 +1,56 @@
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID}
+    
+stages:
+  - test 
+  - build-image-for-release
+  - update-version-chart 
+
+sonarqube-backend-sast:
+  stage: test
+  image: sonarsource/sonar-scanner-cli:latest
+  script:
+    - cd backend
+    - >
+      sonar-scanner
+      -Dsonar.sources=.
+      -Dsonar.projectKey=${SONAR_PROJECT_KEY}
+      -Dsonar.host.url=${SONARQUBE_URL}
+      -Dsonar.login=${SONAR_LOGIN}
+      -Dsonar.projectName="11_vsurin_momob"   
+
+spotbugs-sast:
+  stage: test
+  script:
+    - cd backend
+
+go-test:
+  stage: test
+  image: golang:latest
+  script:
+    - cd backend
+    - go test -v ./...
+  allow_failure: true
+
+build-backend-docker-image:
+  stage: build-image-for-release
+  image: alpine:latest
+  before_script:
+    - apk add docker docker-compose curl
+    - until docker info; do sleep 1; done
+    # переменные CI_REGISTRY_USER, CI_REGISTRY_PASSWORD, CI_REGISTRY генерятся Гитлабом, их задавать не надо
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker-compose build backend
+    - docker-compose push backend
+
+update-version-chart:
+  stage: update-version-chart
+  image: alpine:latest
+  before_script:
+    - apk update && apk add bash curl git openssh-client docker
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY    
+  script:
+    #Настраиваем CLI YC и kubeconfig (неинтерактивный режим)
+    - /bin/bash -s < ./helmchart_ver2.sh

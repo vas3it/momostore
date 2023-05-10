@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: {{ .Values.ports.containerPort }}
+      targetPort: {{ .Values.ports.containerPort }}
+      protocol: TCP
+      nodePort: {{ .Values.ports.nodePort }}
+  selector:
+    app: frontend

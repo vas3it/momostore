@@ -1,0 +1,47 @@
+# values.yaml !!!
+backend: # Это имя чарта из dependencies
+  # Вместо latest правильнее использовать версию .Chart.AppVersion в шаблоне
+  image:
+    repository: gitlab.praktikum-services.ru:5050/v.surin/momostore/
+    tag: latest
+    pullPolicy: IfNotPresent
+#  env:
+#     VAULT_HOST: "51.250.67.45:8200"
+#     DEV_HOST: "51.250.67.45"
+#     VIRTUAL_HOST: "backend"
+#     SPRING_DATASOURCE_URL: "jdbc:postgresql://rc1b-micxirmrnkrwhvb8.mdb.yandexcloud.net:6432/surinvas"
+#     vault_token: aHZzLkNBRVNJQ0ZHYXhSVU1CYnplZlhZTGNzc0xnMzZ0SzRjVDdlWms5RVp1Qk1EbTRsakdoNEtIR2gyY3k1T2EzVnZXRmxyYzBKdGVFUXlTM0JaVGxwb1dHTnhZVUk=
+#     vault_token: hvs.CAESIDadU4HwMj7t30CYLSz3MxS0ImbgCnvUEiF12o1qd0xhGh4KHGh2cy5pWHkza2NQME5YZlloVnNUalhqNUdTcmg
+  spec:
+      replicas: "2"
+      revisionHistoryLimit: "15"
+  strategy:
+    rollingUpdate:
+      maxUnavailable: "20%"
+      maxSurge: "1"
+  ports:
+      containerPort: "8081"
+#  livenessProbe:
+#    initialDelaySeconds: "180"
+#    periodSeconds: "31"
+#    timeoutSeconds: "1"
+#    failureThreshold: "7"
+
+frontend:
+  image:
+    repository: gitlab.praktikum-services.ru:5050/v.surin/momostore/
+    tag: latest
+    pullPolicy: IfNotPresent
+#  env:
+#     vault_token: aHZzLkNBRVNJQ0ZHYXhSVU1CYnplZlhZTGNzc0xnMzZ0SzRjVDdlWms5RVp1Qk1EbTRsakdoNEtIR2gyY3k1T2EzVnZXRmxyYzBKdGVFUXlTM0JaVGxwb1dHTnhZVUk=
+  spec: 
+      replicas: "2"
+      revisionHistoryLimit: "15"
+  ports:
+      containerPort: "80"
+      nodePort: "30081"
+  fqdn: momo.surinvas.ru
+  annotations:
+    subnets: e9b20nn2417gsiagha50
+    securityGroups: enph9bihjav141je6oea
+    groupName: "for-k8s-nodegroup"
