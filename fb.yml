@@ -6,7 +6,6 @@ stages:
   - build-image-for-release
   - update-version-chart
 
-##vas: тест по кнопке, так как в сонаре ошибки. По вебинару - ошибки в коде - не наша проблема)
 sonarqube-frontend-sast:
   stage: test
   image: sonarsource/sonar-scanner-cli:latest
